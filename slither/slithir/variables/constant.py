@@ -69,3 +69,7 @@ class Constant(SlithIRVariable):
 
     def __eq__(self, other):
         return self.value == other
+
+    # TODO(aty): I need a hash function so sorry :(
+    def __hash__(self):
+        return self.value

@@ -69,6 +69,9 @@ class NodeType:
     # Use for state variable declaration
     OTHER_ENTRYPOINT = 0x50
 
+    # Overlay node used purely for the overlay graph
+    OVERLAY = 0X70
+
 
 #    @staticmethod
     def str(t):
@@ -104,6 +107,8 @@ class NodeType:
             return 'BEGIN_LOOP'
         if t == NodeType.ENDLOOP:
             return 'END_LOOP'
+        if t == NodeType.OVERLAY:
+            return 'OVERLAY'
         return 'Unknown type {}'.format(hex(t))
 
 
