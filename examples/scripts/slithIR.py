@@ -24,9 +24,9 @@ for contract in slither.contracts:
 
                 # Print the Solidity expression of the nodes
                 # And the SlithIR operations
-                if node.expression:
+                # if node.expression:
 
                     print('\tSolidity expression: {}'.format(node.expression))
                     print('\tSlithIR:')
-                    for ir in node.irs:
+                    for ir in node.irs_ssa:
                         print('\t\t\t{}'.format(ir))

@@ -1056,10 +1056,10 @@ class Function(ChildContract, ChildInheritance, SourceMapping):
             content += 'digraph{\n'
             for node in self.nodes:
                 label = 'Node Type: {} {}\n'.format(NodeType.str(node.type), node.node_id)
-                if node.expression:
-                    label += '\nEXPRESSION:\n{}\n'.format(node.expression)
-                if node.irs:
-                    label += '\nIRs:\n' + '\n'.join([str(ir) for ir in node.irs])
+                # if node.expression:
+                #     label += '\nEXPRESSION:\n{}\n'.format(node.expression)
+                if node.irs_ssa:
+                    label += '\nIRs:\n' + '\n'.join([str(ir) for ir in node.irs_ssa])
                 content += '{}[label="{}"];\n'.format(node.node_id, label)
                 for son in node.sons:
                     content += '{}->{};\n'.format(node.node_id, son.node_id)

@@ -24,3 +24,7 @@ class Condition(Operation):
 
     def __str__(self):
         return "CONDITION {}".format(self.value)
+
+    @value.setter
+    def value(self, value):
+        self._value = value

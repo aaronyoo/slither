@@ -171,7 +171,7 @@ def choose_detectors(args, all_detector_classes):
             detectors_excluded = args.detectors_to_exclude.split(',')
             for d in detectors:
                 if d in detectors_excluded:
-                    detectors_to_run.remove(detectors[d])
+                    detectors_to_run.remove_by_id(detectors[d])
     else:
         for d in args.detectors_to_run.split(','):
             if d in detectors:

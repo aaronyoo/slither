@@ -179,3 +179,11 @@ class Binary(OperationWithLValue):
                                           self.variable_left,
                                           self.type_str,
                                           self.variable_right)
+
+    @variable_left.setter
+    def variable_left(self, value):
+        self._variables[0] = value
+
+    @variable_right.setter
+    def variable_right(self, value):
+        self._variables[1] = value

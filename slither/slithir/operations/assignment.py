@@ -41,3 +41,7 @@ class Assignment(OperationWithLValue):
                 points = points.points_to
             return '{} (->{}) := {}({})'.format(self.lvalue, points, self.rvalue, self.rvalue.type)
         return '{}({}) := {}({})'.format(self.lvalue, self.lvalue.type, self.rvalue, self.rvalue.type)
+
+    @rvalue.setter
+    def rvalue(self, value):
+        self._rvalue = value

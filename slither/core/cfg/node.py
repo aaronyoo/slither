@@ -41,10 +41,10 @@ class NodeType:
     IF = 0x12
     VARIABLE = 0x13    # Declaration of variable
     ASSEMBLY = 0x14
-    IFLOOP = 0x15
 
     # Merging nodes
     # Can have phi IR operation
+    IFLOOP = 0x15
     ENDIF = 0x50     # ENDIF node source mapping points to the if/else body
     STARTLOOP = 0x51 # STARTLOOP node source mapping points to the entire loop body
     ENDLOOP = 0x52   # ENDLOOP node source mapping points to the entire loop body

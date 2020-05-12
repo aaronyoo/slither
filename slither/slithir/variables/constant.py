@@ -72,4 +72,4 @@ class Constant(SlithIRVariable):
 
     # TODO(aty): I need a hash function so sorry :(
     def __hash__(self):
-        return self.value
+        return hash(self.value)

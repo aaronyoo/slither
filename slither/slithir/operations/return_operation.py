@@ -47,3 +47,7 @@ class Return(Operation):
 
     def __str__(self):
         return "RETURN {}".format(','.join(['{}'.format(x) for x in self.values]))
+
+    @values.setter
+    def values(self, value):
+        self._values = value
