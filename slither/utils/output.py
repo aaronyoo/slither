@@ -2,7 +2,10 @@ import hashlib
 import os
 import json
 import logging
+import zipfile
 from collections import OrderedDict
+from typing import Optional, Dict
+from zipfile import ZipFile
 
 from slither.core.cfg.node import Node
 from slither.core.declarations import Contract, Function, Enum, Event, Structure, Pragma
@@ -10,6 +13,7 @@ from slither.core.source_mapping.source_mapping import SourceMapping
 from slither.core.variables.variable import Variable
 from slither.exceptions import SlitherError
 from slither.utils.colors import yellow
+from slither.utils.myprettytable import MyPrettyTable
 
 logger = logging.getLogger("Slither")
 
@@ -19,6 +23,7 @@ logger = logging.getLogger("Slither")
 # region Output
 ###################################################################################
 ###################################################################################
+
 
 def output_to_json(filename, error, results):
     """
@@ -50,6 +55,36 @@ def output_to_json(filename, error, results):
         else:
             with open(filename, 'w', encoding='utf8') as f:
                 json.dump(json_result, f, indent=2)
+
+
+# https://docs.python.org/3/library/zipfile.html#zipfile-objects
+ZIP_TYPES_ACCEPTED = {'lzma': zipfile.ZIP_LZMA,
+                      'stored': zipfile.ZIP_STORED,
+                      'deflated': zipfile.ZIP_DEFLATED,
+                      'bzip2': zipfile.ZIP_BZIP2}
+
+
+def output_to_zip(filename: str, error: Optional[str], results: Dict, zip_type: str = "lzma"):
+    """
+    Output the results to a zip
+    The file in the zip is named slither_results.json
+    Note: the json file will not have indentation, as a result the resulting json file will be smaller
+    :param zip_type:
+    :param filename:
+    :param error:
+    :param results:
+    :return:
+    """
+    json_result = {
+        "success": error is None,
+        "error": error,
+        "results": results
+    }
+    if os.path.isfile(filename):
+        logger.info(yellow(f'{filename} exists already, the overwrite is prevented'))
+    else:
+        with ZipFile(filename, "w", compression=ZIP_TYPES_ACCEPTED.get(zip_type, zipfile.ZIP_LZMA)) as file_desc:
+            file_desc.writestr("slither_results.json", json.dumps(json_result).encode('utf8'))
 
 
 # endregion
@@ -102,6 +137,7 @@ def _convert_to_markdown(d, markdown_root):
 
     raise SlitherError(f'{type(d)} cannot be converted (no name, or canonical_name')
 
+
 def _convert_to_id(d):
     '''
     Id keeps the source mapping of the node, otherwise we risk to consider two different node as the same
@@ -130,6 +166,7 @@ def _convert_to_id(d):
         return f'{d.name}'
 
     raise SlitherError(f'{type(d)} cannot be converted (no name, or canonical_name')
+
 
 # endregion
 ###################################################################################
@@ -201,7 +238,6 @@ class Output:
 
         if additional_fields:
             self._data['additional_fields'] = additional_fields
-
 
     def add(self, add, additional_fields=None):
         if isinstance(add, Variable):
@@ -433,11 +469,11 @@ class Output:
     ###################################################################################
     ###################################################################################
 
-    def add_pretty_table(self, content, name, additional_fields=None):
+    def add_pretty_table(self, content: MyPrettyTable, name, additional_fields=None):
         if additional_fields is None:
             additional_fields = {}
         type_specific_fields = {
-            'content': content,
+            'content': content.to_json(),
             'name': name
         }
         element = _create_base_element('pretty_table',
